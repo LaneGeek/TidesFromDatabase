@@ -18,22 +18,19 @@ class MainActivity : AppCompatActivity() {
         val db = TideOpenHelper(this, null)
 
         if (db.isEmpty()) {
-            // Kotlin's functional programming in action
-            val xmlFileNames = cities.map { x -> "${x}.xml" }
-
             // We parse each city in the array one at a time
-            cities.forEachIndexed { i, _ ->
+            cities.forEach { city ->
                 run {
                     // We use the XML parser
                     val parser = XmlPullParserHandler()
-                    val inputStream = assets.open(xmlFileNames[i])
+                    val inputStream = assets.open("${city}.xml")
                     val tidesData = parser.parse(inputStream)
 
                     // We fill the database from the parsed XML file
                     tidesData.forEach { x ->
                         run {
                             val tide = TideDataEntry()
-                            tide.city = cities[i]
+                            tide.city = city
                             tide.date = x.date
                             tide.day = x.day
                             tide.time = x.time
@@ -54,9 +51,9 @@ class MainActivity : AppCompatActivity() {
         var month = 0
         var year = 0
 
-        dateButton.setOnClickListener {
+        dateTextView.setOnClickListener {
             val datePicker = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, y, m, d ->
-                dateTextView.text = "Your chosen date: ${m + 1} / ${d} / ${y}"
+                dateTextView.text = "Date: ${m + 1}/${d}/${y}"
                 day = d
                 month = m
                 year = y
