@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("City", city.text)
                 startActivity(intent)
             } else {
-                Toast.makeText(this, "Enter the information above", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Choose a location", Toast.LENGTH_SHORT).show()
             }
         }
     }

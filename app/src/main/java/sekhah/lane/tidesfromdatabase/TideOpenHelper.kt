@@ -39,8 +39,10 @@ class TideOpenHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     // This function will get the first record and see if it exists
-    fun isEmpty(): Boolean = this.readableDatabase.rawQuery("SELECT 1 FROM Tides LIMIT 1", null).count == 0
+    fun isEmpty(): Boolean = this.readableDatabase.rawQuery(
+        "SELECT 1 FROM Tides LIMIT 1", null).count == 0
 
     // This function will return a cursor with tides for a particular date
-    fun getTides(date: String): Cursor? = this.readableDatabase.rawQuery("SELECT * FROM Tides WHERE Date='${date}'", null)
+    fun getTides(city: String, date: String): Cursor? = this.readableDatabase.rawQuery(
+        "SELECT * FROM Tides WHERE City='${city}' AND Date='${date}'", null)
 }
