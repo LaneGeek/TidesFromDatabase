@@ -47,9 +47,9 @@ class MainActivity : AppCompatActivity() {
         radioButton2.text = cities[1]
         radioButton3.text = cities[2]
 
-        var day = 0
+        var day = 1
         var month = 0
-        var year = 0
+        var year = 2019
 
         dateTextView.setOnClickListener {
             val datePicker = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, y, m, d ->

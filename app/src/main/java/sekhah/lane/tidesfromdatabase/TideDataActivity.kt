@@ -16,16 +16,16 @@ class TideDataActivity : AppCompatActivity() {
         val year = intent.getIntExtra("Year", 0)
         val city = intent.getStringExtra("City")
 
-
-
         val db = TideOpenHelper(this, null)
 
         val dayFormat = if (day < 10)  "0${day}" else "${day}"
         val monthFormat = if (month < 9)  "0${month + 1}" else "${month + 1}"
 
         val tidesCursor = db.getTides("${year}/${monthFormat}/${dayFormat}")
-        //val tidesCursor = db.getTides("2019/01/01")
+
         val tidesList = mutableListOf<TideDataEntry>()
+
+        textView.text = "Tides for ${city} on ${month + 1}/${day}/${year}:-"
 
         tidesCursor?.moveToFirst()
         if (tidesCursor != null && tidesCursor.count != 0) {
@@ -41,9 +41,7 @@ class TideDataActivity : AppCompatActivity() {
         }
 
 
-        dayTV.text = day.toString()
-        monthTV.text = month.toString()
-        yearTV.text = "${year}/${monthFormat}/${dayFormat}"
-        cityTV.text = tidesList.count().toString()
+
+
     }
 }
