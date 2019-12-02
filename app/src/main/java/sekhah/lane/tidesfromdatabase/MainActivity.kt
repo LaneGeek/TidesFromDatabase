@@ -14,9 +14,41 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        radioButton1.text = "Astoria"
-        radioButton2.text = "Florence"
-        radioButton3.text = "Newport"
+        val cities = arrayOf("Astoria", "Florence", "Newport")
+        val db = TideOpenHelper(this, null)
+
+        if (db.isEmpty()) {
+            // Kotlin's functional programming in action
+            val xmlFileNames = cities.map { x -> "${x}.xml" }
+
+            // We parse each city in the array one at a time
+            cities.forEachIndexed { i, _ ->
+                run {
+                    // We use the XML parser
+                    val parser = XmlPullParserHandler()
+                    val inputStream = assets.open(xmlFileNames[i])
+                    val tidesData = parser.parse(inputStream)
+
+                    // We fill the database from the parsed XML file
+                    tidesData.forEach { x ->
+                        run {
+                            val tide = TideDataEntry()
+                            tide.city = cities[i]
+                            tide.date = x.date
+                            tide.day = x.day
+                            tide.time = x.time
+                            tide.predictionInCm = x.predictionInCm
+                            tide.highLow = x.highLow
+                            db.addTide(tide)
+                        }
+                    }
+                }
+            }
+        }
+
+        radioButton1.text = cities[0]
+        radioButton2.text = cities[1]
+        radioButton3.text = cities[2]
 
         var day = 0
         var month = 0
@@ -41,8 +73,9 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("Year", year)
                 intent.putExtra("City", city.text)
                 startActivity(intent)
-            } else
+            } else {
                 Toast.makeText(this, "Enter the information above", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
