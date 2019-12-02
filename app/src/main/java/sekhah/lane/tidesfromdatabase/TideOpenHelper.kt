@@ -25,20 +25,20 @@ class TideOpenHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     // This functions adds a record to the database
-    fun addTide(tideDataEntry: TideDataEntry) {
+    fun addTide(tideData: TideData) {
         val values = ContentValues()
-        values.put("City", tideDataEntry.city)
-        values.put("Date", tideDataEntry.date)
-        values.put("Day", tideDataEntry.day)
-        values.put("Time", tideDataEntry.time)
-        values.put("PredictionInCm", tideDataEntry.predictionInCm)
-        values.put("HighLow", tideDataEntry.highLow)
+        values.put("City", tideData.city)
+        values.put("Date", tideData.date)
+        values.put("Day", tideData.day)
+        values.put("Time", tideData.time)
+        values.put("PredictionInCm", tideData.predictionInCm)
+        values.put("HighLow", tideData.highLow)
         //val db = this.writableDatabase
         this.writableDatabase.insert("Tides", null, values)
         this.writableDatabase.close()
     }
 
-    // This function will get the first record and see if it exists
+    // This function will get the first record and see if it exists hence empty or not
     fun isEmpty(): Boolean = this.readableDatabase.rawQuery(
         "SELECT 1 FROM Tides LIMIT 1", null).count == 0
 

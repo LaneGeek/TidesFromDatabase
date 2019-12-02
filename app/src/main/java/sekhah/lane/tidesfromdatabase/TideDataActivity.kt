@@ -3,7 +3,6 @@ package sekhah.lane.tidesfromdatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_tide_data.*
 
 class TideDataActivity : AppCompatActivity() {
@@ -21,12 +20,12 @@ class TideDataActivity : AppCompatActivity() {
         // Open the database
         val db = TideOpenHelper(this, null)
 
-        // Make variables to be used for date format query
+        // Make variables to be used in date format query
         val dayFormat = if (day < 10) "0${day}" else "${day}"
         val monthFormat = if (month < 9) "0${month + 1}" else "${month + 1}"
 
         // Make the query and create a heading text view
-        val tidesCursor = db.getTides(city, "${year}/${monthFormat}/${dayFormat}")
+        val tidesCursor = db.getTides(city ?: "", "${year}/${monthFormat}/${dayFormat}")
         textView.text = "Tides for ${city} on ${month + 1}/${day}/${year}:-"
 
         // Extract the tide data from the cursor
@@ -46,12 +45,8 @@ class TideDataActivity : AppCompatActivity() {
                     tidesCursor.moveToNext()
                 }
             }
-
             // Render the list view
             listView.adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, output)
-        } else {
-            Toast.makeText(this, "No tides found", Toast.LENGTH_SHORT).show()
         }
-
     }
 }

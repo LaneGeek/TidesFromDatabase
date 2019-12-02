@@ -14,22 +14,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Our locations - easy to add more
         val cities = arrayOf("Astoria", "Florence", "Newport")
+
+        // Open the database
         val db = TideOpenHelper(this, null)
 
+        // If database empty fill it with data from XML files
         if (db.isEmpty()) {
-            // We parse each city in the array one at a time
             cities.forEach { city ->
                 run {
-                    // We use the XML parser
                     val parser = XmlPullParserHandler()
                     val inputStream = assets.open("${city}.xml")
                     val tidesData = parser.parse(inputStream)
-
-                    // We fill the database from the parsed XML file
                     tidesData.forEach { x ->
                         run {
-                            val tide = TideDataEntry()
+                            val tide = TideData()
                             tide.city = city
                             tide.date = x.date
                             tide.day = x.day
@@ -43,14 +43,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // We name our radio buttons with cities
         radioButton1.text = cities[0]
         radioButton2.text = cities[1]
         radioButton3.text = cities[2]
 
+        // We set our default date
         var day = 1
         var month = 0
         var year = 2019
 
+        // Use the DatePicker to get the date from the user
         dateTextView.setOnClickListener {
             val datePicker = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, y, m, d ->
                 dateTextView.text = "Date: ${m + 1}/${d}/${y}"
@@ -61,6 +64,7 @@ class MainActivity : AppCompatActivity() {
             datePicker.show()
         }
 
+        // Start the second activity ans send the user selected data to it
         getTideDateButton.setOnClickListener {
             val city = findViewById<RadioButton>(radioGroup.checkedRadioButtonId)
             if (city != null && year != 0) {
